@@ -1,0 +1,111 @@
+name: Build Ari AI Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build Ari AI APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android Build Tools
+        run: |
+          sdkmanager "build-tools;36.0.0"
+          sdkmanager "build-tools;34.0.0"
+          sdkmanager "platforms;android-35"
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      - name: Build Single Release APK
+        run: bash ./gradlew :androidApp:assembleFossRelease --stacktrace
+
+      - name: Prepare Single APK
+        run: |
+          mkdir -p build-apks
+          cp androidApp/build/outputs/apk/foss/release/*.apk build-apks/Ari-AI.apk
+          ls -lh build-apks/
+
+      - name: Upload Ari AI APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Ari-AI-APK
+          path: build-apks/Ari-AI.apk
+          retention-days: 14
+
+      - name: Send Single Ari AI APK to Telegram Channel via MTProto
+        run: |
+          pip install telethon --quiet
+          python3 -c '
+          import os, asyncio
+          from telethon import TelegramClient
+
+          api_id = 37321306
+          api_hash = "5cd9e5bbfb572a4429a0c54774153b47"
+          bot_token = "8841143616:AAGbcJKf3MLTN17-tpmwhZKZQIIbErDT1PA"
+          chat = "@aaafreecloud"
+          apk_path = "build-apks/Ari-AI.apk"
+
+          async def main():
+              client = TelegramClient("ci_session", api_id, api_hash)
+              await client.start(bot_token=bot_token)
+              print("Connected to Telegram MTProto...")
+
+              size_mb = os.path.getsize(apk_path) / (1024 * 1024)
+              print(f"Uploading Ari-AI.apk ({size_mb:.2f} MB) to {chat}...")
+              caption = (
+                  f"🚀 **Ari AI — Official Production Release (Termux-Grade Terminal & Google AI Studio Phone Emulator)**\n\n"
+                  f"📦 **Package ID:** `com.ariai.app`\n"
+                  f"🏷️ **Build Variant:** Release (FOSS)\n"
+                  f"📁 **Artifact:** `Ari-AI.apk`\n"
+                  f"💾 **Size:** {size_mb:.2f} MB\n"
+                  f"📱 **Phone Emulator:** Google AI Studio-style live preview (Pixel 9 Pro, iPhone 16 Pro, Galaxy S24, DevTools console, prompt bar)\n"
+                  f"🐧 **Termux Terminal:** 24-bit TrueColor RGB, 5,000-line scrollback buffer, alt screen buffers, extra keys\n"
+                  f"🔗 **GitHub:** https://github.com/aaa-ai-coder/Ari-AI\n\n"
+                  f"📥 *Download and install Ari-AI.apk below!*"
+              )
+              msg = await client.send_file(
+                  chat,
+                  apk_path,
+                  caption=caption,
+                  parse_mode="md"
+              )
+              print(f"Ari-AI.apk sent successfully! Message ID: {msg.id}")
+
+              report = (
+                  f"📋 **Ari AI Release Verification & Features**\n\n"
+                  f"• 📱 **Google AI Studio Phone Emulator:** Centered realistic hardware phone frames (Pixel 9 Pro, iPhone 16 Pro Dynamic Island, Galaxy S24, iPad Tablet), live native Chromium WebView, active port switcher (:3000, :5173, :8000, :8080), DevTools console logs drawer, and interactive Ask AI to Modify bottom prompt bar.\n"
+                  f"• 🐧 **Termux-Grade Linux Terminal:** Authentic VT parser with 24-bit TrueColor RGB, 256 colors, text styling attributes, 5,000-line scrollback history with touch drag navigation, and alternate buffer support for vim, nano, and htop.\n"
+                  f"• 🛠️ **Real Linux Developer Toolchains:** Node.js/npm, Python 3 + Astral UV, GitHub CLI (`gh`), Aider AI, and essential Linux tools pre-bundled in PRoot Debian.\n"
+                  f"• 🤖 **Antigravity CLI (AGY):** Dedicated quick-launcher chip and native runner in the mobile PRoot environment.\n"
+                  f"• 🎨 **Ari Neon & Termux Black Themes:** High-contrast syntax highlighting with responsive monospace cell grid."
+              )
+              await client.send_message(chat, report, parse_mode="md")
+              print("Report sent!")
+              await client.disconnect()
+
+          asyncio.run(main())
+          '

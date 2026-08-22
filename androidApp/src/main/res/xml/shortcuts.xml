@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:shortcutId="new_chat"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/new_chat_title"
+        android:shortcutLongLabel="@string/new_chat_title">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.ariai.app"
+            android:targetClass="com.inspiredandroid.kai.MainActivity" />
+    </shortcut>
+    <shortcut
+        android:shortcutId="open_terminal"
+        android:enabled="true"
+        android:icon="@mipmap/ic_launcher"
+        android:shortcutShortLabel="@string/open_terminal_title"
+        android:shortcutLongLabel="@string/open_terminal_title">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:targetPackage="com.ariai.app"
+            android:targetClass="com.inspiredandroid.kai.MainActivity" />
+    </shortcut>
+</shortcuts>

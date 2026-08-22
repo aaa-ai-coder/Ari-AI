@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Ari Ai</string>
+    <string name="new_chat_title">New Chat</string>
+    <string name="open_terminal_title">Ari Build</string>
+</resources>

@@ -1,0 +1,77 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Outer Orbital Energy Ring -->
+    <path
+        android:pathData="M54,20 C72.78,20 88,35.22 88,54 C88,72.78 72.78,88 54,88 C35.22,88 20,72.78 20,54 C20,35.22 35.22,20 54,20 Z"
+        android:strokeWidth="2.5"
+        android:strokeAlpha="0.4"
+        android:strokeColor="#00E5FF"
+        android:fillColor="#00000000"/>
+
+    <!-- Tilted Accent Orbit Ring -->
+    <path
+        android:pathData="M26,44 C34,26 74,26 82,44 C90,62 50,82 26,64 C18,58 20,49 26,44 Z"
+        android:strokeWidth="2.0"
+        android:strokeAlpha="0.5"
+        android:strokeColor="#B388FF"
+        android:fillColor="#00000000"/>
+
+    <!-- Stylized Futuristic 'A' - Left Arm -->
+    <path
+        android:pathData="M54,26 L30,76 L39,76 L54,42 L61,58 L68,54 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="30"
+                android:startY="76"
+                android:endX="54"
+                android:endY="26"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00E5FF"/>
+                <item android:offset="1.0" android:color="#7C4DFF"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Stylized Futuristic 'A' - Right Arm -->
+    <path
+        android:pathData="M54,26 L78,76 L69,76 L54,42 Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="54"
+                android:startY="26"
+                android:endX="78"
+                android:endY="76"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#7C4DFF"/>
+                <item android:offset="1.0" android:color="#FF4081"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Glowing AI Nexus Orb in the center of 'A' -->
+    <path
+        android:pathData="M54,58m-11,0a11,11 0,1,1 22,0a11,11 0,1,1 -22,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="43"
+                android:startY="47"
+                android:endX="65"
+                android:endY="69"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#00E5FF"/>
+                <item android:offset="0.5" android:color="#B388FF"/>
+                <item android:offset="1.0" android:color="#651FFF"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Central Inner Energy Core -->
+    <path
+        android:pathData="M54,58m-5,0a5,5 0,1,1 10,0a5,5 0,1,1 -10,0"
+        android:fillColor="#FFFFFF"/>
+</vector>
